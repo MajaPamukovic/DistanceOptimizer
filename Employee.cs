@@ -47,7 +47,7 @@ namespace DistanceOptimizer
             }
             set
             {
-                TransitMode transitModeVal = TransitMode.Driving;
+                TransitMode transitModeVal = TransitMode.driving;
                 Enum.TryParse<TransitMode>(value, out transitModeVal);
                 TransitMode = transitModeVal;
             }

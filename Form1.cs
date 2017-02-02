@@ -1,12 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using Excel = Microsoft.Office.Interop.Excel;
 using System.Web.Script.Serialization;
@@ -27,9 +23,15 @@ namespace DistanceOptimizer
         private string urlMode = "&mode=";
         private string urlKey = "&key=";
         private string urlDepartureTime = "&departure_time=";
-        private string urlArrivalTime = "&arrival_time=";
-        // 12/12/2016 @ 8:00am (UTC) - just a random monday
-        private string urlArrivalTimeValue = "1481529600";
+        private string urlArrivalTime = "&arrival_time="; // can only be used when travel mode = public transit!
+        // February 13 2016 @ 9:00am (UTC) - just a random monday
+        private string urlTimeValue9AM = "1486976400";
+        // one hour earlier...
+        private string urlTimeValue8AM = "1486972800";
+        private string urlTrafficModel = "&traffic_model=";
+        private string urlTrafficModelValuePessimistic = "pessimistic";
+        private string urlTrafficModelValueBestGuess = "best_guess";
+
         const string EmployeeDataFileName = "EmployeeList.json";
         const string OfficeDataFileName = "OfficeList.json";
         const string DurationMatrixFileName = "DurationMatrix.json";
@@ -49,14 +51,17 @@ namespace DistanceOptimizer
             dataGridView1.Rows.Clear();
         }
 
-        private string GetFullURL(string origin, string destination, string mode)
+        private string GetFullURL(string origin, string destination, TransitMode mode)
         {
-            if (mode == "transit")
-                return string.Concat(urlBase, origin, urlDestinations, destination, urlArrivalTime, urlArrivalTimeValue, urlMode, mode, urlKey, googleApiKey);
-            return string.Concat(urlBase, origin, urlDestinations, destination, urlDepartureTime, urlArrivalTimeValue, urlMode, mode, urlKey, googleApiKey);
+            string trafficModel = checkBox1.Checked ? "pessimistic" : "best_guess";
+
+            if (mode == TransitMode.transit)
+                return string.Concat(urlBase, origin, urlDestinations, destination, urlArrivalTime, urlTimeValue9AM, urlMode, "transit", urlTrafficModel, trafficModel, urlKey, googleApiKey);
+            return string.Concat(urlBase, origin, urlDestinations, destination, urlDepartureTime, urlTimeValue8AM, urlMode, mode.ToString(), urlTrafficModel, trafficModel, 
+                urlKey, googleApiKey);
         }
 
-        private RouteResponse GetResponse(JavaScriptSerializer serializer, string origin, string destination, string mode = "driving")
+        private RouteResponse GetResponse(JavaScriptSerializer serializer, string origin, string destination, TransitMode mode)// = "driving")
         {
             var httpClient = new HttpClient();
             var response = httpClient.GetAsync(GetFullURL(origin, destination, mode)).Result;
@@ -85,7 +90,7 @@ namespace DistanceOptimizer
                 nameValue = sheet.UsedRange.Cells[i, 1].Value2;
                 addressValue = sheet.UsedRange.Cells[i, 2].Value2;
                 transitValue = sheet.UsedRange.Cells[i, 4].Value2;
-                TransitMode mode = TransitMode.Driving;
+                TransitMode mode = TransitMode.driving;
 
                 if (addressValue == null || addressValue == "")
                     continue;
@@ -145,6 +150,7 @@ namespace DistanceOptimizer
 
         private void ConnectTheDots()
         {
+            listBox2.Items.Clear();
             for (int i = 0; i < officeList.Count; i++)
             {
                 for (int j = 0; j < employeeList.Count; j++)
@@ -178,13 +184,14 @@ namespace DistanceOptimizer
                 }
             }
 
+            officeList.Sort((item1, item2) => (item1.CalculateAverageDuration.CompareTo(item2.CalculateAverageDuration)));
             for (int i = 0; i < officeList.Count; i++)
             {
                 listBox3.Items.Add(officeList[i].Address + ": " + (officeList[i].CalculateAverageDuration / 60).ToString("F") + " (" + (officeList[i].MinimalDuration / 60).ToString("F") + " - " + (officeList[i].MaximalDuration / 60).ToString("F") + ")");
             }
         }
 
-        private void GetDurationsFromGoogle() // ova treba samo napuniti durationsMatrix s neta!!!
+        private void GetDurationsFromGoogle()
         {
             durationsMatrix = new List<List<RouteResponse>>();
 
@@ -195,7 +202,7 @@ namespace DistanceOptimizer
             {
                 for (int j = 0; j < employeeList.Count; j++)
                 {
-                    RouteResponse responseObj = GetResponse(serializer, employeeList[j].Address, officeList[i].Address, employeeList[j].TransitModeString);
+                    RouteResponse responseObj = GetResponse(serializer, employeeList[j].Address, officeList[i].Address, employeeList[j].TransitMode);
                     durationsMatrix[j].Add(responseObj);
                 }
             }
@@ -212,12 +219,30 @@ namespace DistanceOptimizer
         {
             openFileDialog1.ShowDialog();
         }
-        
+
+        private int GetSelectedRowIndex()
+        {
+            //var selectedRowsCollection = dataGridView1.SelectedRows.Cast<DataGridViewRow>();
+            var selectedCellsCollection = dataGridView1.SelectedCells.Cast<DataGridViewCell>();
+            // if (selectedRowsCollection.Any())
+            //    return selectedRowsCollection.First().Index;
+            // else 
+            if (selectedCellsCollection.Any())
+                return selectedCellsCollection.First().RowIndex;
+
+            return -1;
+        }
+
         private void DisplayIndividualDetails()
         {
             dataGridView2.Rows.Clear();
-
-            List<RouteResponse> responses = durationsMatrix[dataGridView1.SelectedRows[0].Index];
+            int selectedRowIndex = GetSelectedRowIndex();            
+            if (selectedRowIndex < 0)
+            {
+                MessageBox.Show("Please select an employee to display distances.");
+                return;
+            }
+            List<RouteResponse> responses = durationsMatrix[selectedRowIndex];
             foreach (RouteResponse response in responses)
             {
                 string[] newRow = new string[] { response.destination_addresses.First(), (response.GetBestDurationInfo / 60).ToString("F"), (response.Distance / 1000).ToString("F") + " km"};

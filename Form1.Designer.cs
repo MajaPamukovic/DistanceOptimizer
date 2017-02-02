@@ -32,6 +32,9 @@
             this.LoadSavedDataButton = new System.Windows.Forms.Button();
             this.listBox3 = new System.Windows.Forms.ListBox();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AddressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.TransitTypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridView2 = new System.Windows.Forms.DataGridView();
             this.OfficeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.DurationCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -44,9 +47,7 @@
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
-            this.NameCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.AddressCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TransitTypeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.checkBox1 = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
             this.SuspendLayout();
@@ -86,6 +87,21 @@
             this.dataGridView1.Size = new System.Drawing.Size(470, 376);
             this.dataGridView1.TabIndex = 4;
             this.dataGridView1.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellContentClick);
+            // 
+            // NameCol
+            // 
+            this.NameCol.HeaderText = "Name";
+            this.NameCol.Name = "NameCol";
+            // 
+            // AddressCol
+            // 
+            this.AddressCol.HeaderText = "Address";
+            this.AddressCol.Name = "AddressCol";
+            // 
+            // TransitTypeCol
+            // 
+            this.TransitTypeCol.HeaderText = "Transportation";
+            this.TransitTypeCol.Name = "TransitTypeCol";
             // 
             // dataGridView2
             // 
@@ -192,26 +208,22 @@
             this.label3.TabIndex = 14;
             this.label3.Text = "or just";
             // 
-            // NameCol
+            // checkBox1
             // 
-            this.NameCol.HeaderText = "Name";
-            this.NameCol.Name = "NameCol";
-            // 
-            // AddressCol
-            // 
-            this.AddressCol.HeaderText = "Address";
-            this.AddressCol.Name = "AddressCol";
-            // 
-            // TransitTypeCol
-            // 
-            this.TransitTypeCol.HeaderText = "Transportation";
-            this.TransitTypeCol.Name = "TransitTypeCol";
+            this.checkBox1.AutoSize = true;
+            this.checkBox1.Location = new System.Drawing.Point(294, 8);
+            this.checkBox1.Name = "checkBox1";
+            this.checkBox1.Size = new System.Drawing.Size(77, 17);
+            this.checkBox1.TabIndex = 15;
+            this.checkBox1.Text = "Pessimistic";
+            this.checkBox1.UseVisualStyleBackColor = true;
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 789);
+            this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
@@ -254,6 +266,7 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn NameCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn AddressCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn TransitTypeCol;
+        private System.Windows.Forms.CheckBox checkBox1;
     }
 }
 

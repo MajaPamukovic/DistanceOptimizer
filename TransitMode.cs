@@ -10,10 +10,10 @@ namespace DistanceOptimizer
     public enum TransitMode
     {
         [Description("driving")]
-        Driving,
+        driving,
         [Description("transit")]
-        Transit,
+        transit,
         [Description("bicycling")]
-        Bicycling
+        bicycling
     }
 }
