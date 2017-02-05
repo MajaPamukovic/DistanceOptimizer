@@ -17,7 +17,8 @@ namespace DistanceOptimizer
         private List<List<RouteResponse>> durationsMatrix = new List<List<RouteResponse>>();
         JavaScriptSerializer serializer = new JavaScriptSerializer();
 
-        private string googleApiKey = "AIzaSyDjbANNRU5l9-spaj-88NRxxWchSpw6Yxk";
+        //private string googleApiKey = "AIzaSyDjbANNRU5l9-spaj-88NRxxWchSpw6Yxk";
+        private string googleApiKey = "AIzaSyAfrthhkvKDTfGW7gNxskXifRuoPQ8C9y0";
         private string urlBase = "https://maps.googleapis.com/maps/api/distancematrix/json?units=metric&origins=";
         private string urlDestinations = "&destinations=";
         private string urlMode = "&mode=";
@@ -47,13 +48,14 @@ namespace DistanceOptimizer
             employeeList = new List<Employee>();
             officeList = new List<OfficeLocation>();
             //durationsMatrix = new List<List<RouteResponse>>();
-            listBox3.Items.Clear();
+            //listBox3.Items.Clear();
+            dataGridView3.Rows.Clear();
             dataGridView1.Rows.Clear();
         }
 
         private string GetFullURL(string origin, string destination, TransitMode mode)
         {
-            string trafficModel = checkBox1.Checked ? "pessimistic" : "best_guess";
+            string trafficModel = checkBox1.Checked ? urlTrafficModelValuePessimistic : urlTrafficModelValueBestGuess;
 
             if (mode == TransitMode.transit)
                 return string.Concat(urlBase, origin, urlDestinations, destination, urlArrivalTime, urlTimeValue9AM, urlMode, "transit", urlTrafficModel, trafficModel, urlKey, googleApiKey);
@@ -61,7 +63,7 @@ namespace DistanceOptimizer
                 urlKey, googleApiKey);
         }
 
-        private RouteResponse GetResponse(JavaScriptSerializer serializer, string origin, string destination, TransitMode mode)// = "driving")
+        private RouteResponse GetResponse(JavaScriptSerializer serializer, string origin, string destination, TransitMode mode)
         {
             var httpClient = new HttpClient();
             var response = httpClient.GetAsync(GetFullURL(origin, destination, mode)).Result;
@@ -187,7 +189,9 @@ namespace DistanceOptimizer
             officeList.Sort((item1, item2) => (item1.CalculateAverageDuration.CompareTo(item2.CalculateAverageDuration)));
             for (int i = 0; i < officeList.Count; i++)
             {
-                listBox3.Items.Add(officeList[i].Address + ": " + (officeList[i].CalculateAverageDuration / 60).ToString("F") + " (" + (officeList[i].MinimalDuration / 60).ToString("F") + " - " + (officeList[i].MaximalDuration / 60).ToString("F") + ")");
+                //listBox3.Items.Add(officeList[i].Address + ": " + (officeList[i].CalculateAverageDuration / 60).ToString("F") + " (" + (officeList[i].MinimalDuration / 60).ToString("F") + " - " + (officeList[i].MaximalDuration / 60).ToString("F") + ")");
+                string[] newRow = new string[] { officeList[i].Name ?? "Name", officeList[i].Address, (officeList[i].CalculateAverageDuration / 60).ToString("F"), " (" + (officeList[i].MinimalDuration / 60).ToString("F") + " - " + (officeList[i].MaximalDuration / 60).ToString("F") + ")" };
+                dataGridView3.Rows.Add(newRow);
             }
         }
 

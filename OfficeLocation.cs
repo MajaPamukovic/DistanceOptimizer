@@ -19,6 +19,8 @@ namespace DistanceOptimizer
 
         public string Address { get; set; }
 
+        public string Name { get; set; }
+
         [ScriptIgnore]
         public double AverageDuration { get; set; }
 

@@ -48,8 +48,14 @@
             this.button4 = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.dataGridView3 = new System.Windows.Forms.DataGridView();
+            this.NameColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AddressColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.AvgTravelColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.MinMaxTravelTimeColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).BeginInit();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -218,11 +224,45 @@
             this.checkBox1.Text = "Pessimistic";
             this.checkBox1.UseVisualStyleBackColor = true;
             // 
+            // dataGridView3
+            // 
+            this.dataGridView3.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridView3.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.NameColumn,
+            this.AddressColumn,
+            this.AvgTravelColumn,
+            this.MinMaxTravelTimeColumn});
+            this.dataGridView3.Location = new System.Drawing.Point(13, 513);
+            this.dataGridView3.Name = "dataGridView3";
+            this.dataGridView3.Size = new System.Drawing.Size(470, 264);
+            this.dataGridView3.TabIndex = 16;
+            // 
+            // NameColumn
+            // 
+            this.NameColumn.HeaderText = "Name";
+            this.NameColumn.Name = "NameColumn";
+            // 
+            // AddressColumn
+            // 
+            this.AddressColumn.HeaderText = "Address";
+            this.AddressColumn.Name = "AddressColumn";
+            // 
+            // AvgTravelColumn
+            // 
+            this.AvgTravelColumn.HeaderText = "Avg travel time";
+            this.AvgTravelColumn.Name = "AvgTravelColumn";
+            // 
+            // MinMaxTravelTimeColumn
+            // 
+            this.MinMaxTravelTimeColumn.HeaderText = "(Min - max travel time)";
+            this.MinMaxTravelTimeColumn.Name = "MinMaxTravelTimeColumn";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1033, 789);
+            this.Controls.Add(this.dataGridView3);
             this.Controls.Add(this.checkBox1);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.button4);
@@ -240,6 +280,7 @@
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridView3)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -267,6 +308,11 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn AddressCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn TransitTypeCol;
         private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.DataGridView dataGridView3;
+        private System.Windows.Forms.DataGridViewTextBoxColumn NameColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AddressColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn AvgTravelColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn MinMaxTravelTimeColumn;
     }
 }
 
